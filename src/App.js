@@ -1,26 +1,55 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react'
+import { Filter, Job } from './components'
+import { data } from './components/data'
 
-function App() {
+const App = () => {
+  const [jobs, setJobs] = useState([])
+  const [tags, setTags] = useState([])
+
+  useEffect(() => {
+    if (tags) {
+      const filteredJobs = data.filter(job => {
+        return tags.every(tag => {
+          return (
+            job.role === tag ||
+            job.level === tag ||
+            job.languages.includes(tag) ||
+            job.tools.includes(tag)
+          )
+        })
+      })
+      setJobs(filteredJobs)
+    } else {
+      setJobs(data)
+    }
+  }, [tags])
+
+  const addTags = tag => {
+    if (!tags.includes(tag)) setTags(prevTags => [...prevTags, tag])
+  }
+
+  const clearTags = () => {
+    setTags([])
+  }
+
+  const removeTag = name => {
+    const newTags = tags.filter(tag => tag !== name)
+    setTags(newTags)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='container main'>
+      <div className='header' />
+      <div className='container'>
+        {!!tags.length && (
+          <Filter tags={tags} clearTags={clearTags} removeTag={removeTag} />
+        )}
+      </div>
+      {jobs?.map(job => (
+        <Job job={job} key={job.id} addTags={addTags} />
+      ))}
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
