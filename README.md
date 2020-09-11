@@ -2,7 +2,7 @@
 
 Challenge solved by [@aemzayn](https://github.com/aemzayn)
 
-[Live website]()
+[Live website](https://frontend-mentor-static-job-listing-lime.vercel.app/)
 
 ##### Technology used:
 
